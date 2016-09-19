@@ -17,9 +17,9 @@ Bubble has just a few commands available at the moment.
 
 -"!ex #" rolls the number of dice specified instead of #, returning the hits. It will also give the number of hits for a damage roll. Example: 
 
-<Yuki_> !ex 5 <Bubble> 
+Yuki_: !ex 5 <Bubble> 
 
-<Yuki_> has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
+Yuki_: has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
 
 # To do
 -Add Bubble's lines to the logs.
@@ -27,3 +27,6 @@ Bubble has just a few commands available at the moment.
 -Improve logs with bans, kicks, nick changes.
 
 -Make !context return an actual 200 lines.
+
+# Contact
+To talk to me, message Yuki_ on Freenode or Rizon. 
