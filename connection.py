@@ -6,7 +6,7 @@ import threading
 from commands import *
 
 class Connection:
-    def __init__(self, host, nick):
+    def __init__(self, host, nick, password):
         self.nick = nick
         self.host = host
         self.password = password
