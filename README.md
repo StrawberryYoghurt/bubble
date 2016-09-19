@@ -8,14 +8,22 @@ To start Bubble, run start.py. Her settings can be changed in config.txt. She'll
 
 # Commands
 Bubble has just a few commands available at the moment. 
+
 -"Hi Bubble" will make her politely respond. 
+
 -"Hey Bubble" will return a string created by a Markov generator, using the logs of the channel the command was given in. 
+
 -"!context" will return a pastebin link with the last 200 lines. (Not exactly 200 right now.)
+
 -"!ex #" rolls the number of dice specified instead of #, returning the hits. It will also give the number of hits for a damage roll. Example: 
+
 <Yuki_> !ex 5 <Bubble> 
+
 <Yuki_> has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
 
 # To do
 -Add Bubble's lines to the logs.
+
 -Improve logs with bans, kicks, nick changes.
--Make !context return an actual 200 lines. 
+
+-Make !context return an actual 200 lines.
