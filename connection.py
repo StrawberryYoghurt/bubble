@@ -44,7 +44,7 @@ class Connection:
             while True:
                 self.read = self.irc.recv(500)
                 self.to_terminal(self.read)
-                self.identify(self.read)
+                identify(self, self.read)
                 if self.read.find('PING') != -1:
                     self.send('PONG ' + self.read.split() [1] + '\n')
                 if self.logswitch == False and self.read.find('PING :') == -1:
@@ -54,18 +54,6 @@ class Connection:
         except KeyboardInterrupt: 
             self.send(raw_input('Enter your input: '))
             self.start()
-
-    def identify(self, read):
-        if read.find('PRIVMSG #'):
-            channel = read[read.find('PRIVMSG') + 8:read.find(' :')]
-            if read.find('Hi Bubble') != -1:
-                greet(self, channel)
-            if read.find('ey bubble') + read.find('ey Bubble') != -2: 
-                markov(self, channel)
-            if read.find('!context') != -1:
-                backlog(self, channel)
-            if read.find('!ex') != -1: 
-                exalteddice(self, channel, read)
 
     def update_logs(self):
         for channel in self.connectedto:

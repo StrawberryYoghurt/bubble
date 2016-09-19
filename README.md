@@ -28,5 +28,8 @@ Yuki_: has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
 
 -Make !context return an actual 200 lines.
 
+# Bugs
+-!context doesn't seem to work on Freenode. 
+
 # Contact
 To talk to me, message Yuki_ on Freenode or Rizon. 

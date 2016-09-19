@@ -1,6 +1,18 @@
 import random
 import requests
 import time
+
+def identify(self, read):
+    if read.find('PRIVMSG #'):
+        channel = read[read.find('PRIVMSG') + 8:read.find(' :')]
+        if read.find('Hi Bubble') != -1:
+            greet(self, channel)
+        if read.find('ey bubble') + read.find('ey Bubble') != -2: 
+            markov(self, channel)
+        if read.find('!context') != -1:
+            backlog(self, channel)
+        if read.find('!ex') != -1: 
+            exalteddice(self, channel, read)
         
 def greet(self, channel):
     '''Greet'''
