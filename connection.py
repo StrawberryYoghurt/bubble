@@ -6,10 +6,13 @@ import threading
 from commands import *
 
 class Connection:
-    def __init__(self, host, nick, password):
+    def __init__(self, server, port, nick, ident, realname, password):
         self.nick = nick
-        self.host = host
+        self.nick = nick
+        self.ident = ident
+        self.realname = realname
         self.password = password
+        self.host = (server, port)
         self.ircbase = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.irc = ssl.wrap_socket(self.ircbase)
         self.connectedto = []
@@ -18,15 +21,14 @@ class Connection:
         self.read = []
 
     def connect_server(self):
-        ident = 'BubbleBot'
-        realname = 'BubbleBot'
         self.check_logfile()
         self.irc.connect(self.host)
         self.send('NICK ' + self.nick + '\n')
-        self.send('USER ' + ident + ' ' + str(self.host) + ' ' + realname + '\n')
-        self.send('PRIVMSG nickserv :identify ' + self.password + '\n')
+        self.send('USER ' + self.ident + ' ' + str(self.host) + ' ' + self.realname + '\n')
+        if self.password != False:
+            self.send('PRIVMSG nickserv :identify ' + self.password + '\n')
         self.to_terminal("Connected.")
-        time.sleep(2)
+        time.sleep(10)
 
     def join_channel(self, channel):
         self.check_logfile(channel + '.log')
@@ -46,7 +48,7 @@ class Connection:
                 if self.read.find('PING') != -1:
                     self.send('PONG ' + self.read.split() [1] + '\n')
                 if self.logswitch == False and self.read.find('PING :') == -1:
-                    logger = threading.Timer(60, self.update_logs)
+                    logger = threading.Timer(10, self.update_logs)
                     logger.start()
                     self.logswitch = True
         except KeyboardInterrupt: 
@@ -55,15 +57,15 @@ class Connection:
 
     def identify(self, read):
         if read.find('PRIVMSG #'):
-            self.channel = read[read.find('PRIVMSG') + 8:read.find(' :')]
-            if read.find('Hi Bubble.') != -1:
-                greet(self)
-            if read.find('!context') != -1:
-                backlog(self)
-            if read.find('!ex') != -1: 
-                exalteddice(self, read)
+            channel = read[read.find('PRIVMSG') + 8:read.find(' :')]
+            if read.find('Hi Bubble') != -1:
+                greet(self, channel)
             if read.find('ey bubble') + read.find('ey Bubble') != -2: 
-                markov(self)
+                markov(self, channel)
+            if read.find('!context') != -1:
+                backlog(self, channel)
+            if read.find('!ex') != -1: 
+                exalteddice(self, channel, read)
 
     def update_logs(self):
         for channel in self.connectedto:
