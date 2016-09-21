@@ -3,7 +3,7 @@ server="irc.freenode.net"
 port=6697
 
 ###Bubble will connect using the information listed below. If you want Bubble to identify with NickServ, enter your password in between the quotation marks.###
-nick="Bubble2"
+nick="Bubble"
 ident="BubbleBot"
 realname="Bubblebot"
 password=""
