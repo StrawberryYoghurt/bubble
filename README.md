@@ -1,7 +1,7 @@
 # Bubble
-Bubble is a multi-purpose IRC bot, written in Python 2. The goal is to make her into a one size fits all, modular bot that's easy to use and adapt to your needs. The goal of this project is to create a robust bot with modules that range from channel functionalities like logging, memos and assistance with moderation to pen and paper RPG dice rolls and tracking. 
+Bubble is a multi-purpose IRC bot, written in Python 2. The goal of this project is to create a robust bot with modules that range from channel functionalities like logging, memos and assistance with moderation to pen and paper RPG dice rolls and tracking. She should be easy to use, and modular in her functionality. 
 
-Right now, there is some basic functionality. Bubble can maintain a connection, log channels, and has a few simple commands. 
+Right now, there is just some basic functionality. Bubble can maintain a connection, log channels, and has a few simple commands. 
 
 # Usage
 To start Bubble, run start.py. Her settings can be changed in config.py. She'll automatically log all channels she's in, and will also maintain a raw logfile, containing all the lines she receives. You can send any IRC command in raw form by using a keyboard interrupt (CTRL+C) and typing in your message. 
