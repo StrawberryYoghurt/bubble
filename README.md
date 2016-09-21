@@ -4,7 +4,7 @@ Bubble is a multi-purpose IRC bot, written in Python 2. The goal is to make her 
 Right now, there is some basic functionality. Bubble can maintain a connection, log channels, and has a few simple commands. 
 
 # Usage
-To start Bubble, run start.py. Her settings can be changed in config.txt. She'll automatically log all channels she's in, and will also maintain a raw logfile, containing all the lines she receives. 
+To start Bubble, run start.py. Her settings can be changed in config.py. She'll automatically log all channels she's in, and will also maintain a raw logfile, containing all the lines she receives. You can send any IRC command in raw form by using a keyboard interrupt (CTRL+C) and typing in your message. 
 
 # Commands
 Bubble has just a few commands available at the moment. 
