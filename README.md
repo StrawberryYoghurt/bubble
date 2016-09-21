@@ -22,14 +22,9 @@ Yuki_: !ex 5 <Bubble>
 Yuki_: has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
 
 # To do
--Add Bubble's lines to the logs.
-
--Improve logs with bans, kicks, nick changes.
-
--Make !context return an actual 200 lines.
-
-# Bugs
--!context doesn't seem to work on Freenode. 
+-Remove double text to make the raw logs human-readable - create one function to do that. Include bans, kicks, nick changes.
+-Add op functionalities.
+-Add a vote command, for democratic channels. 
 
 # Contact
 To talk to me, message Yuki_ on Freenode or Rizon. 

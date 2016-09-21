@@ -8,7 +8,6 @@ from commands import *
 class Connection:
     def __init__(self, server, port, nick, ident, realname, password):
         self.nick = nick
-        self.nick = nick
         self.ident = ident
         self.realname = realname
         self.password = password
@@ -25,7 +24,7 @@ class Connection:
         self.irc.connect(self.host)
         self.send('NICK ' + self.nick + '\n')
         self.send('USER ' + self.ident + ' ' + str(self.host) + ' ' + self.realname + '\n')
-        if self.password != False:
+        if self.password != "":
             self.send('PRIVMSG nickserv :identify ' + self.password + '\n')
         self.to_terminal("Connected.")
         time.sleep(10)
@@ -76,21 +75,22 @@ class Connection:
         self.backlog = []
         print 'Logs updated.'
         self.logswitch = False
-
+        
     def to_terminal(self, content):
         if content.find('\n') != -1:
             print self.get_timestamp() + content[:content.find('\n')]
+            self.backlog += [content]
         else:
             print self.get_timestamp() + content
-        self.backlog += [content]
-
+            self.backlog += [content + '\n']
+        
     def send_message(self, content, target):
-        self.irc.send('PRIVMSG ' + target + ' :' + content + '\n')
-        self.to_terminal('Sent to ' + target + ': ' + content)
+        self.irc.send('PRIVMSG ' + target + ' :' + str(content) + '\n')
+        self.to_terminal(':' + self.nick + '!' + 'PRIVMSG ' + target + ' :' + str(content))
 
     def send(self, content):
         self.irc.send(content + '\n')
-        self.to_terminal('Sent: ' + content)
+        self.to_terminal('Sent: ' + str(content))
 
     def get_timestamp(self):
         return time.asctime(time.gmtime(time.time())) + ' * '

@@ -16,7 +16,7 @@ def identify(self, read):
         
 def greet(self, channel):
     '''Greet'''
-    self.irc.send('PRIVMSG ' + channel + ' :Hello there. \n')
+    self.send_message('Hello there.', channel)
 
 def backlog(self, channel):
     '''Backlog grabber'''
@@ -25,15 +25,15 @@ def backlog(self, channel):
     linesback = 0
     pointer = 0
     backlog = open('backlog.log', 'w+')
-    while linesback < 200:
+    while linesback < 500:
         try:
             logfile.seek(-pointer,2)
             newlinecheck = logfile.read(1)
             if(newlinecheck == '\n'):
                 linesback += 1
             pointer += 1
-        except:
-            pass
+        except IOError:
+            break
     for line in logfile.readlines():
         if line.find('PRIVMSG ' + channel) != -1:
             backlog.write('<' + line[line.find(':')+1:line.find('!')] + '> ')
@@ -42,10 +42,15 @@ def backlog(self, channel):
             backlog.write(line[line.find(':')+1:line.find('!')] + ' has parted ' + channel + '. Quit message: ' + line[line.find(channel + ' :') + len(channel + ' :\n') - 1:])
         if line.find('JOIN :' + channel) != -1: 
             backlog.write(line[line.find(':')+1:line.find('!')] + ' has joined ' + channel + '.\n')
+        backlog.seek(0)
+        line_count = sum(1 for line in backlog)
+        if line_count >= 200:
+            break
+        backlog.seek(0,2)
     backlog.seek(0)
     pastedata = {'api_dev_key': '57118c0169e20c0f77a629cb1e3455da', 'api_option': 'paste', 'api_paste_code': backlog.read(), 'api_paste_expire_date': '1H', 'api_paste_private': '1'}
     pastebin = requests.post('http://pastebin.com/api/api_post.php', pastedata)
-    self.irc.send('PRIVMSG ' + channel + ' :' + pastebin.text + '\n')
+    self.send_message(pastebin.text, channel)
     logfile.close()
 
 def exalteddice(self, channel, read):
@@ -55,21 +60,23 @@ def exalteddice(self, channel, read):
     crits = 0
     rollcount = 0
     rolls = int(read[read.find('!ex ') + 4:read.find('!ex ')+6])
-    self.irc.send('PRIVMSG ' + channel + ' :<' + str(roller) + '> has rolled ' + str(rolls) + ' dice. [')
+    response = '<' + str(roller) + '> has rolled ' + str(rolls) + ' dice. ['
     while rolls >= rollcount: 
         rollcount += 1
         result = random.randint(1, 10)
         if result >= 7: 
-            self.irc.send('\x02')
+            response += '\x02'
             successes += 1
         if result == 10:
             crits += 1
+        response += str(result)
         if rollcount != rolls:
-            self.irc.send(str(result) + ', ')
+            response += ', '
         if result >= 7: 
-            self.irc.send('\x02')
+            response += '\x02'
         if rollcount == rolls:
-            self.irc.send(str(result) + '] \x02' + str(successes + crits) + ' hits.\x02 Damage roll: ' + str(successes) + '\n')
+            response += '] \x02' + str(successes + crits) + ' hits.\x02 Damage roll: ' + str(successes)
+            self.send_message(response, channel)
             break
 
 def markov(self, channel):
@@ -110,5 +117,5 @@ def markov(self, channel):
             lastword = random.choice(markovlist.keys())
         wisdom += str(lastword) + ' '
         wisdomcount += 1
-    self.irc.send('PRIVMSG ' + channel + ' :' + wisdom + '\n')
+    self.send_message(wisdom, channel)
     logfile.close()
