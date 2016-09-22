@@ -56,32 +56,24 @@ class Connection:
 
     def update_logs(self):
         for channel in self.connectedto:
-            logs = open(channel + '.log', 'ab')
+            with open(channel + '.log', 'ab') as logfile:
+                for line in self.logify_text(channel, self.backlog):
+                    logfile.write(line)
+            print 'Updated logs for ' + channel
+        with open('rawlogs.log', 'ab') as logfile:
             for line in self.backlog:
-                if line.find('###Starting new log session###') != -1:
-                    logs.write('\n###Starting new log session ### ' + self.get_timestamp() + '###\n\n')
-                elif line.find('PRIVMSG ' + channel) != -1:
-                    logs.write(self.get_timestamp() + '<' + line[line.find(':')+1:line.find('!')] + '> ')
-                    logs.write(line[line.find(channel + ' :') + len(channel + ' :'):])
-                elif line.find('PART ' + channel + ' :') != -1: 
-                    logs.write(self.get_timestamp() + line[line.find(':')+1:line.find('!')] + ' has parted ' + channel + '. Quit message: ' + line[line.find(channel + ' :') + len(channel + ' :\n') - 1:])
-                elif line.find('JOIN :' + channel + ' :') != -1: 
-                    logs.write(self.get_timestamp() + line[line.find(':')+1:line.find('!')] + ' has joined ' + channel + '.\n')
-            logs.close()
-        logs = open('rawlogs.log', 'ab')
-        for line in self.backlog:
-            logs.write(line)
-        logs.close()
+                logfile.write(line)
         self.backlog = []
         print 'Logs updated.'
         self.logswitch = False
         
     def to_terminal(self, content):
+        content = self.get_timestamp() + content
         if content.find('\n') != -1:
-            print self.get_timestamp() + content[:content.find('\n')]
+            print content[:content.find('\n')]
             self.backlog += [content]
         else:
-            print self.get_timestamp() + content
+            print content
             self.backlog += [content + '\n']
         
     def send_message(self, content, target):
@@ -100,3 +92,25 @@ class Connection:
             newlogs = open(filename, 'w')
             newlogs.write("Generating a new log file. \n\n\n")
             print 'Generating a new log file.'
+
+    def logify_text(self, channel, linesin):
+        linesout = []
+        for line in linesin:
+            timestamp = line[:27]
+            line = line[27:]
+            if line.find('###Starting new log session###') != -1:
+                linesout += [timestamp + '\n###Starting new log session ### ' + self.get_timestamp() + '###\n\n']
+            elif line.find('PRIVMSG ' + channel) != -1:
+                linesout += [timestamp + '<' + line[line.find(':')+1:line.find('!')] + '> ']
+                linesout += [line[line.find(channel + ' :') + len(channel + ' :'):]]
+            elif line.find('PART ' + channel + ' :') != -1: 
+                linesout += [timestamp + line[line.find(':')+1:line.find('!')] + ' has parted ' + channel + '. Quit message: ' + line[line.find(channel + ' :') + len(channel + ' :\n') - 1:]]
+            elif line.find('JOIN :' + channel + ' :') != -1: 
+                linesout += [timestamp + line[line.find(':')+1:line.find('!')] + ' has joined ' + channel + '.\n']
+            elif line.find('MODE ' + channel + ' +b') != -1:
+                linesout += [timestamp + line[line.find(':')+1:line.find('!')] + ' sets ban on ' + line.split()[-1] + '.\n']
+            elif line.find('MODE ' + channel + ' -b') != -1:
+                linesout += [timestamp + line[line.find(':')+1:line.find('!')] + ' removes ban on ' + line.split()[-1] + '.\n']
+            elif line.find(' NICK :') != -1:
+                linesout += [timestamp + line[line.find(':')+1:line.find('!')] + ' is now known as ' + line.split()[-1][1:] + '.\n']
+        return linesout

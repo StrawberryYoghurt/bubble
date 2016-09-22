@@ -23,7 +23,9 @@ Yuki_: has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
 
 # To do
 
--Remove double text to make the raw logs human-readable - create one function to do that. Include bans, kicks, nick changes.
+-Fix the context command to properly show the last 200 lines, instead of the first 200 Bubble finds. 
+
+-Include kicks in logging.
 
 -Add op functionalities.
 
@@ -32,4 +34,4 @@ Yuki_: has rolled 5 dice. [6, 10, 5, 6, 8] 3 hits. Damage roll: 2
 -Add memo, lastseen commands.
 
 # Contact
-To talk to me, message Yuki_ on Freenode or Rizon.
+To talk to me, message Yuki_ on Freenode or Rizon. 
